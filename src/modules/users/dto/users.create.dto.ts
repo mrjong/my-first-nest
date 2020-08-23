@@ -11,8 +11,8 @@ export class CreateUserDto {
   @IsString()
   readonly nickname: string;
 
-  @IsString()
-  readonly gender: string;
+  @IsInt()
+  readonly gender: number;
 
   @IsString()
   readonly city: string;

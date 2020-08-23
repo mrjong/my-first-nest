@@ -34,16 +34,22 @@ export class UsersService {
     return this.usersRepository.find()
   }
 
-  findOne(id: string): Promise<User> {
-    return this.usersRepository.findOne(id)
+  findOne(username: string): Promise<User> {
+    return this.usersRepository.findOne({
+      username
+    })
   }
 
   async remove(id: string): Promise<DeleteResult> {
     return this.usersRepository.delete(id)
   }
 
+  /**
+  * 注册
+  * @param createUserDto 请求体
+  */
   async register(createUserDto: CreateUserDto): Promise<any> {
-    const { username, password, nickname, city, gender } = createUserDto
+    const { username, password, nickname, city, gender, avatar } = createUserDto
     const user = await this.getUserInfo(username)
     if (user) {
       return {
@@ -56,13 +62,19 @@ export class UsersService {
 
     try {
       //存入数据库
-      return this.usersRepository.save({
+      await this.usersRepository.save({
         username,
         password: hashPwd,
+        password_salt: salt,
         nickname,
-        // city,
-        // gender
+        city,
+        gender,
+        avatar
       })
+      return {
+        code: 200,
+        msg: 'Success',
+      };
     } catch (error) {
       return {
         code: 503,

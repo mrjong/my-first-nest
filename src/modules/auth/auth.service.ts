@@ -15,8 +15,7 @@ export class AuthService {
     const user = await this.usersService.findOne(username);
     if (user) {
       const hashedPassword = user.password;
-      // const salt = user.salt;
-      const salt = '123';
+      const salt = user.password_salt;
 
       // 通过密码盐，加密传参，再与数据库里的比较，判断是否相等
       const hashPassword = encryptPassword(password, salt);
@@ -43,7 +42,7 @@ export class AuthService {
 
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: any) {
-    const payload = { username: user.username, sub: user.userId, realName: user.realName, role: user.role };
+    const payload = { username: user.username };
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
     try {
       const token = this.jwtService.sign(payload);
