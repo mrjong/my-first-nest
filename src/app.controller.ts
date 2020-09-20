@@ -4,7 +4,8 @@ import { AuthService } from './modules/auth/auth.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {
+  }
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
